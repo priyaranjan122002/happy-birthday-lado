@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* ── OKLCH Pigment Formulations (design-genius Stage 4 Lever 2) ── */
+    --canvas-base: oklch(0.12 0.022 295);          /* Chromatic deep midnight substrate */
+    --canvas-surface: oklch(0.16 0.026 295);       /* Elevated card tier 1 */
+    --canvas-raised: oklch(0.20 0.030 295);        /* Elevated core tier 2 */
+    
+    --ink-primary: oklch(0.96 0.012 85);           /* Warm alabaster cream */
+    --ink-secondary: oklch(0.78 0.025 295);        /* Muted lavender silver */
+    --ink-tertiary: oklch(0.58 0.025 295);         /* Shadowed violet */
+
+    --accent-gold: oklch(0.82 0.13 78);            /* Florentine gold */
+    --accent-rose: oklch(0.74 0.16 15);            /* English velvet rose */
+    --accent-blush: oklch(0.85 0.08 20);           /* Candlelight blush */
+
+    --border-hairline: rgba(232, 195, 116, 0.16);
+
+    /* ── Typography & OpenType (design-genius Stage 4 Lever 3) ── */
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    --font-handwriting: 'Caveat', cursive;
+
+    /* ── Canonical Kinetic Timing Tokens (design-genius Stage 4 Lever 5) ── */
+    --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-snap: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    --ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+    --duration-instant: 100ms;
+    --duration-micro: 180ms;
+    --duration-macro: 280ms;
+    --duration-reveal: 450ms;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--canvas-base);
+    color: var(--ink-primary);
+  }
+}
+
+/* Typography with Scaled Negative Tracking */
+.font-serif-luxury {
+  font-family: var(--font-serif);
+  letter-spacing: -0.025em;
+}
+
+.font-display-luxury {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+.font-handwriting {
+  font-family: var(--font-handwriting);
+}
+
+/* OpenType Tabular Numerics (Anti-Jitter) */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'ss01' 1;
+}
+
+/* ── Concentric Radii Geometry (R_inner = max(0, R_outer - Padding - Border)) ── */
+.concentric-card-16 {
+  border-radius: 16px;
+  padding: 8px;
+  background-color: rgba(26, 21, 38, 0.75);
+  border: 1px solid var(--border-hairline);
+  backdrop-filter: blur(16px);
+}
+
+.concentric-card-16 > .concentric-inner {
+  border-radius: 7px; /* 16px - 8px - 1px */
+  background-color: var(--canvas-surface);
+}
+
+.concentric-card-24 {
+  border-radius: 24px;
+  padding: 12px;
+  background-color: rgba(26, 21, 38, 0.78);
+  border: 1px solid var(--border-hairline);
+  backdrop-filter: blur(16px);
+}
+
+.concentric-card-24 > .concentric-inner {
+  border-radius: 11px; /* 24px - 12px - 1px */
+  background-color: var(--canvas-surface);
+}
+
+/* Doppelrand (Double-Bezel) Keepsake Architecture */
+.doppelrand-card {
+  border-radius: 20px;
+  padding: 6px;
+  background: rgba(232, 195, 116, 0.08);
+  border: 1px solid var(--border-hairline);
+}
+
+.doppelrand-card > .doppelrand-core {
+  border-radius: 13px; /* 20px - 6px - 1px */
+  background: var(--canvas-surface);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+/* ── Explicit Kinetic Transitions (Replacing Banned transition-all) ── */
+.transition-kinetic {
+  transition-property: transform, opacity, background-color, border-color, box-shadow;
+  transition-duration: var(--duration-micro);
+  transition-timing-function: var(--ease-enter);
+}
+
+.transition-snap {
+  transition-property: transform, background-color;
+  transition-duration: var(--duration-instant);
+  transition-timing-function: var(--ease-snap);
+}
+
+.transition-modal {
+  transition-property: transform, opacity;
+  transition-duration: var(--duration-macro);
+  transition-timing-function: var(--ease-enter);
+}
+
+/* Tactile Active Press Feedback */
+.tactile-press {
+  transition: transform var(--duration-instant) var(--ease-snap), background-color var(--duration-micro) var(--ease-enter);
+  user-select: none;
+}
+
+.tactile-press:active {
+  transform: scale(0.97);
+}
+
+/* Luxury Glassmorphism with Specular Rim Highlight */
+.glass-card {
+  background: rgba(26, 21, 38, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-hairline);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-card-hover {
+  transition: transform var(--duration-micro) var(--ease-enter), border-color var(--duration-micro) var(--ease-enter), box-shadow var(--duration-micro) var(--ease-enter);
+}
+
+.glass-card-hover:hover {
+  background: rgba(36, 29, 52, 0.85);
+  border-color: rgba(232, 195, 116, 0.38);
+  box-shadow: 0 14px 40px -10px rgba(232, 195, 116, 0.18), 0 0 20px rgba(244, 194, 194, 0.1);
+  transform: translateY(-3px);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF6E5 0%, #E8C374 50%, #C99738 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rose-gradient-text {
+  background: linear-gradient(135deg, #FFE4E6 0%, #F472B6 50%, #FB7185 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 3D Perspective Containers */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Strict Accessibility & Reduced Motion Gate */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .tactile-press:active {
+    transform: none !important;
+  }
+}
