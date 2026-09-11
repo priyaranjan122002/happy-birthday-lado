@@ -95,7 +95,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="bg-white p-3 pb-8 rounded-sm shadow-2xl shadow-black/60 border border-stone-200 transform rotate-[-6deg] w-48">
           <div className="h-44 bg-stone-900 overflow-hidden relative">
             <img
-              src="/photos/photo-1.jpg"
+              src="./photos/photo-1.jpg"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=400&auto=format&fit=crop";
               }}
@@ -121,7 +121,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="bg-white p-3 pb-8 rounded-sm shadow-2xl shadow-black/60 border border-stone-200 transform rotate-[7deg] w-48">
           <div className="h-44 bg-stone-900 overflow-hidden relative">
             <img
-              src="/photos/photo-2.jpg"
+              src="./photos/photo-2.jpg"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=400&auto=format&fit=crop";
               }}
