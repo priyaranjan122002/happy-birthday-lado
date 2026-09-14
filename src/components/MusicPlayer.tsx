@@ -195,7 +195,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
               <Heart size={9} className="text-[#F472B6] fill-[#F472B6] shrink-0" />
             </div>
             <span className="text-[9px] sm:text-[10px] text-[#A59CB8] truncate leading-tight mt-0.5">
-              {currentTrack.artist}
+              {currentTrack.movie} • {currentTrack.artist}
             </span>
           </div>
 

@@ -11,8 +11,8 @@ export const siteContent: SiteContent = {
   heroSubtitle: "To the girl who made my world brighter, softer, and infinitely more magical. Today is all about celebrating you.",
   
   // ── Audio & Video Configuration ────────────────────────────────
-  // Ad-free direct audio bundled with the website
-  bgMusicUrl: "./music/romantic.mp3",
+  // Ad-free direct Bollywood romantic song bundled with the website
+  bgMusicUrl: "./music/tum-se-hi.mp3",
   
   // Video file: Drop your video into public/video/tribute.mp4 or use YouTube/Drive
   videoUrl: "./video/tribute.mp4",
@@ -520,18 +520,18 @@ export const siteContent: SiteContent = {
     { id: 30, text: "Because you are you — perfectly, beautifully, unapologetically my favorite person.", category: "Forever" }
   ],
 
-  // ── Act 7: The Master Love Letter ──────────────────────────────
+  // ── Act 7: The Master Love Letter (From The Heart) ───────────
   letter: {
-    title: "A Letter From My Heart to Yours",
-    greeting: "To My Dearest & Most Special Girl,",
+    title: "A Letter Straight From My Heart ❤️",
+    greeting: "Baby, Happy Birthday Meri Jaan 🍰🥮",
     paragraphs: [
-      "I was sitting down thinking about what to give you on your birthday, and I realized that no store-bought gift could ever capture what you mean to me. So I wanted to freeze our memories in time, right here, just for you.",
-      "From the first day we met, my world started shifting in the most beautiful ways. Before you, days just passed by. But with you, every sunrise, every stupid argument, every roadside chai, and every quiet car ride has turned into a memory I cherish with all my heart.",
-      "You have this rare, glowing light inside you. You make people feel seen, you make dull rooms lively, and you make me feel like the luckiest human alive just by holding my hand. Thank you for your patience, your silly laughs, your unconditional warmth, and for choosing to be my partner in this crazy journey.",
-      "On this September 15th, I want you to know: no matter how older we grow, no matter where life leads us, I will always be right beside you — cheering your loudest, wiping your tears, matching your goofy energy, and loving you more with every single heartbeat.",
-      "Make the biggest wish today when you blow out the candles, because you deserve every bit of happiness the universe has to offer."
+      "Mele bache, I know aapko lagta hoga yeh sab maine AI se kiya hai aur fake sa hai sab... par sach yeh hai ki maine har ek photo, har ek cheez apne aap se khud select kari hai — jo aapke liye sabse best ho sakti thi meri jana.",
+      "Sorry agar kabhi meri wajah se aapko bura laga ho baby, par yeh jo kuch bhi hai maine poore apne dil se likha aur banaya hai jana 😍🧁",
+      "Aur aaj aapka mere sath 7th birthday 🎂 hai! Main chahta hoon ki aise hi aapka 70th birthday bhi mere sath aaye, aur hum humeshaa aise hi rahein — haste, ladte-jhagadte, par humesha ek doosre ke sath rahein meri jaan.",
+      "Main apne bugu se bohot bohot pyaar karta hoon... I love you a lot! And wish you many many happy returns of the day 💖😘 Happy birthday meri jaan 🧁😍😍",
+      "Mele bache ko bhagwan saari khushiyan de, saare jahaan ki khushiyan milein aapko... Happy birthday baby girl, mere bugge! 👶❤️✨"
     ],
-    signOff: "Forever & Always Yours,",
-    sender: "Your Person ❤️"
+    signOff: "Humesha Sirf Aur Sirf Aapka,",
+    sender: "Aapka Bugu ❤️"
   }
 };
