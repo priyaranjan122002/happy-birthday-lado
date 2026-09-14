@@ -1,67 +1,46 @@
-export interface BollywoodTrack {
+export interface SongTrack {
   id: string;
   title: string;
   movie: string;
   artist: string;
-  type: 'youtube' | 'local';
-  youtubeId?: string;
-  localSrc?: string;
+  src: string;
   mood: string;
 }
 
-export const BOLLYWOOD_PLAYLIST: BollywoodTrack[] = [
+export const ROMANTIC_PLAYLIST: SongTrack[] = [
   {
-    id: 'tum-se-hi',
-    title: 'Tum Se Hi',
-    movie: 'Jab We Met',
-    artist: 'Mohit Chauhan',
-    type: 'youtube',
-    youtubeId: 'Cb6wuzOurPc',
-    mood: 'Soulful • Aadha sa vaada...'
+    id: 'romantic-love-theme',
+    title: 'Pyaar Ka Ehsaas (Love Theme)',
+    movie: 'For Meri Jaan',
+    artist: 'Acoustic Piano & Strings',
+    src: './music/romantic.mp3',
+    mood: 'Soulful & Heartfelt • Dil Ki Baat'
   },
   {
-    id: 'kesariya',
-    title: 'Kesariya',
-    movie: 'Brahmāstra',
-    artist: 'Arijit Singh',
-    type: 'youtube',
-    youtubeId: 'BddP6PYo2gs',
-    mood: 'Romantic • Ishq Hai Piya...'
+    id: 'heartwarming-melody',
+    title: 'Heartwarming Romance',
+    movie: 'Our Story',
+    artist: 'Soft Piano Melody',
+    src: './music/heartwarming.mp3',
+    mood: 'Emotional & Warm • Every beat for you'
   },
   {
-    id: 'apna-bana-le',
-    title: 'Apna Bana Le',
-    movie: 'Bhediya',
-    artist: 'Arijit Singh',
-    type: 'youtube',
-    youtubeId: 'u2NAuswnTKs',
-    mood: 'Emotional • Tu Mera Koi Na...'
+    id: 'air-prelude',
+    title: 'Sukoon (Sweet Whisper)',
+    movie: 'Special Moments',
+    artist: 'Violin & Acoustic',
+    src: './music/air-prelude.mp3',
+    mood: 'Sweet & Peaceful • Forever Love'
   },
   {
-    id: 'raataan-lambiyan',
-    title: 'Raataan Lambiyan',
-    movie: 'Shershaah',
-    artist: 'Jubin Nautiyal & Asees Kaur',
-    type: 'youtube',
-    youtubeId: 'gvyUuxdRdR4',
-    mood: 'Sweet • Kaate Kate Na...'
-  },
-  {
-    id: 'pehla-nasha',
-    title: 'Pehla Nasha',
-    movie: 'Jo Jeeta Wohi Sikandar',
-    artist: 'Udit Narayan',
-    type: 'youtube',
-    youtubeId: '3fw5LXftoZI',
-    mood: 'Classic • Pehla Khumaar...'
-  },
-  {
-    id: 'local-song',
-    title: 'Your Local MP3',
+    id: 'custom-song',
+    title: 'Humaara Khas Gaana',
     movie: 'Custom Audio',
-    artist: 'public/music/song.mp3',
-    type: 'local',
-    localSrc: '/music/song.mp3',
-    mood: 'Personal Custom File'
+    artist: 'Special Dedication',
+    src: './music/song.mp3',
+    mood: 'Dedicated to Lado ❤️'
   }
 ];
+
+// Alias for backward compatibility if imported elsewhere
+export const BOLLYWOOD_PLAYLIST = ROMANTIC_PLAYLIST;

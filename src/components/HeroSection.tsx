@@ -55,8 +55,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         seconds: Math.floor((differenceElapsed / 1000) % 60),
       });
 
-      // Countdown to 15 September 2026
-      const bdayTarget = new Date('2026-09-15T00:00:00').getTime();
+      // Countdown to 15 September 2026 00:00:00 IST
+      const bdayTarget = new Date('2026-09-15T00:00:00+05:30').getTime();
       const diffCountdown = bdayTarget - now;
 
       if (diffCountdown <= 0) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Music, Disc, SkipForward, SkipBack, ListMusic, ChevronUp, ChevronDown, Heart } from 'lucide-react';
-import { BOLLYWOOD_PLAYLIST } from '../data/playlist';
+import { Volume2, VolumeX, Music, Disc, SkipForward, SkipBack, ListMusic, Heart, Play, Pause } from 'lucide-react';
+import { ROMANTIC_PLAYLIST } from '../data/playlist';
 import { playClick } from '../lib/audio';
 
 interface MusicPlayerProps {
@@ -11,126 +11,125 @@ interface MusicPlayerProps {
 export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [volume, setVolume] = useState<number>(0.75);
+  const [volume, setVolume] = useState<number>(0.8);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [showPlaylist, setShowPlaylist] = useState<boolean>(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState<boolean>(false);
 
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const currentTrack = ROMANTIC_PLAYLIST[currentTrackIndex];
 
-  const currentTrack = BOLLYWOOD_PLAYLIST[currentTrackIndex];
-
-  // PostMessage command to YouTube iframe
-  const sendYouTubeCommand = (func: string, args: any[] = []) => {
-    if (iframeRef.current && iframeRef.current.contentWindow) {
-      iframeRef.current.contentWindow.postMessage(
-        JSON.stringify({ event: 'command', func, args }),
-        '*'
-      );
-    }
-  };
-
-  // Start music on unlock
+  // Auto-start on unlock / user interaction
   useEffect(() => {
-    if (autoStart) {
-      setIsPlaying(true);
-      if (currentTrack.type === 'youtube') {
-        setTimeout(() => {
-          sendYouTubeCommand('playVideo');
-        }, 500);
-      } else if (audioRef.current) {
+    if (autoStart && audioRef.current) {
+      audioRef.current.volume = volume;
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch((err) => {
+            console.log("Audio autoplay prevented by browser policy (needs user interaction):", err);
+            setIsPlaying(false);
+          });
+      }
+    }
+  }, [autoStart]);
+
+  // When track index changes, switch and play if was playing
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+      if (isPlaying) {
         audioRef.current.play().catch(console.error);
       }
     }
-  }, [autoStart, currentTrackIndex]);
+  }, [currentTrackIndex]);
 
-  // Handle play/pause
+  // Toggle play/pause
   const togglePlay = () => {
+    if (!audioRef.current) return;
+
     if (isPlaying) {
-      if (currentTrack.type === 'youtube') {
-        sendYouTubeCommand('pauseVideo');
-      } else if (audioRef.current) {
-        audioRef.current.pause();
-      }
+      audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      if (currentTrack.type === 'youtube') {
-        sendYouTubeCommand('playVideo');
-      } else if (audioRef.current) {
-        audioRef.current.play().catch(console.error);
-      }
-      setIsPlaying(true);
+      audioRef.current.volume = volume;
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(console.error);
     }
   };
 
   const handleNextTrack = () => {
-    const nextIdx = (currentTrackIndex + 1) % BOLLYWOOD_PLAYLIST.length;
+    const nextIdx = (currentTrackIndex + 1) % ROMANTIC_PLAYLIST.length;
     setCurrentTrackIndex(nextIdx);
     setIsPlaying(true);
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(console.error);
+      }
+    }, 50);
   };
 
   const handlePrevTrack = () => {
-    const prevIdx = (currentTrackIndex - 1 + BOLLYWOOD_PLAYLIST.length) % BOLLYWOOD_PLAYLIST.length;
+    const prevIdx = (currentTrackIndex - 1 + ROMANTIC_PLAYLIST.length) % ROMANTIC_PLAYLIST.length;
     setCurrentTrackIndex(prevIdx);
     setIsPlaying(true);
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(console.error);
+      }
+    }, 50);
   };
 
   const handleSelectTrack = (index: number) => {
     setCurrentTrackIndex(index);
     setIsPlaying(true);
     setShowPlaylist(false);
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(console.error);
+      }
+    }, 50);
   };
 
   const toggleMute = () => {
+    if (!audioRef.current) return;
     if (isMuted) {
+      audioRef.current.muted = false;
       setIsMuted(false);
-      sendYouTubeCommand('unMute');
-      if (audioRef.current) audioRef.current.muted = false;
     } else {
+      audioRef.current.muted = true;
       setIsMuted(true);
-      sendYouTubeCommand('mute');
-      if (audioRef.current) audioRef.current.muted = true;
     }
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVol = parseFloat(e.target.value);
     setVolume(newVol);
-    sendYouTubeCommand('setVolume', [newVol * 100]);
-    if (audioRef.current) audioRef.current.volume = newVol;
+    if (audioRef.current) {
+      audioRef.current.volume = newVol;
+    }
     if (newVol === 0) {
       setIsMuted(true);
     } else if (isMuted) {
       setIsMuted(false);
+      if (audioRef.current) audioRef.current.muted = false;
     }
   };
 
   return (
     <div className="fixed top-3 right-3 sm:top-5 sm:right-5 z-50 flex flex-col items-end gap-2 select-none">
-      {/* Hidden background YouTube audio player */}
-      {currentTrack.type === 'youtube' && currentTrack.youtubeId && (
-        <iframe
-          key={currentTrack.id}
-          ref={iframeRef}
-          src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?enablejsapi=1&autoplay=1&loop=1&playlist=${currentTrack.youtubeId}&origin=${encodeURIComponent(window.location.origin)}`}
-          title="Bollywood Romantic Song"
-          className="w-0 h-0 opacity-0 pointer-events-none absolute"
-          allow="autoplay; encrypted-media"
-        />
-      )}
+      {/* 100% Ad-Free Pure HTML5 Audio Element */}
+      <audio
+        ref={audioRef}
+        src={currentTrack.src}
+        preload="auto"
+        onEnded={handleNextTrack}
+        onError={(e) => console.log("Audio load note:", e)}
+      />
 
-      {/* HTML5 audio for local file fallback */}
-      {currentTrack.type === 'local' && (
-        <audio
-          ref={audioRef}
-          src={currentTrack.localSrc}
-          loop
-          autoPlay={isPlaying}
-        />
-      )}
-
-      {/* Main Floating Vinyl Music Capsule */}
+      {/* Main Floating Music Capsule */}
       <div className="flex items-center gap-1.5 sm:gap-2">
         {/* Expandable Volume Slider */}
         <div
@@ -156,7 +155,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
           <button
             onClick={togglePlay}
             className="relative flex items-center justify-center mr-2 cursor-pointer group min-w-[34px] min-h-[34px] tactile-press"
-            title={isPlaying ? "Pause Bollywood Song" : "Play Bollywood Song"}
+            title={isPlaying ? "Pause Music" : "Play Music"}
             aria-label="Toggle playback"
           >
             <div className="relative">
@@ -167,7 +166,13 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
                 }`}
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#E11D48]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#E11D48] flex items-center justify-center">
+                  {isPlaying ? (
+                    <Pause size={7} className="text-white fill-white" />
+                  ) : (
+                    <Play size={7} className="text-white fill-white ml-0.5" />
+                  )}
+                </div>
               </div>
             </div>
             {isPlaying && (
@@ -181,7 +186,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
               playClick('press');
               setShowPlaylist(!showPlaylist);
             }}
-            className="flex flex-col text-left cursor-pointer pr-1 sm:pr-2 max-w-[105px] sm:max-w-[170px]"
+            className="flex flex-col text-left cursor-pointer pr-1 sm:pr-2 max-w-[110px] sm:max-w-[170px]"
           >
             <div className="flex items-center gap-1">
               <span className="text-[11px] sm:text-xs font-serif-luxury text-white font-semibold truncate leading-tight">
@@ -190,7 +195,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
               <Heart size={9} className="text-[#F472B6] fill-[#F472B6] shrink-0" />
             </div>
             <span className="text-[9px] sm:text-[10px] text-[#A59CB8] truncate leading-tight mt-0.5">
-              {currentTrack.movie}
+              {currentTrack.artist}
             </span>
           </div>
 
@@ -202,8 +207,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
                 handlePrevTrack();
               }}
               className="p-1.5 text-[#C4B7DA] hover:text-[#E8C374] transition-colors min-w-[28px] min-h-[28px] flex items-center justify-center tactile-press"
-              title="Previous Song"
-              aria-label="Previous Song"
+              title="Previous Track"
+              aria-label="Previous Track"
             >
               <SkipBack size={13} />
             </button>
@@ -213,8 +218,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
                 handleNextTrack();
               }}
               className="p-1.5 text-[#C4B7DA] hover:text-[#E8C374] transition-colors min-w-[28px] min-h-[28px] flex items-center justify-center tactile-press"
-              title="Next Bollywood Song"
-              aria-label="Next Song"
+              title="Next Track"
+              aria-label="Next Track"
             >
               <SkipForward size={13} />
             </button>
@@ -238,7 +243,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
               className={`p-1.5 transition-colors min-w-[28px] min-h-[28px] flex items-center justify-center tactile-press ${
                 showPlaylist ? 'text-[#E8C374]' : 'text-[#C4B7DA] hover:text-[#E8C374]'
               }`}
-              title="Open Bollywood Playlist"
+              title="Open Playlist"
               aria-label="Toggle Playlist"
             >
               <ListMusic size={14} />
@@ -247,21 +252,21 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
         </div>
       </div>
 
-      {/* Expandable Bollywood Playlist Dropdown for Mobile & Desktop */}
+      {/* Expandable Playlist Dropdown */}
       {showPlaylist && (
         <div className="w-[calc(100vw-1.5rem)] max-w-xs sm:w-72 bg-[#171228]/95 backdrop-blur-xl border border-[#E8C374]/35 rounded-2xl p-3 shadow-2xl shadow-black/90 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
             <span className="text-xs uppercase tracking-widest font-semibold text-[#E8C374] flex items-center gap-1.5">
               <Music size={12} />
-              <span>Bollywood Romance</span>
+              <span>Ad-Free Romantic Music</span>
             </span>
             <span className="text-[10px] text-[#A59CB8]">
-              {BOLLYWOOD_PLAYLIST.length} Songs
+              {ROMANTIC_PLAYLIST.length} Tracks
             </span>
           </div>
 
           <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
-            {BOLLYWOOD_PLAYLIST.map((track, idx) => {
+            {ROMANTIC_PLAYLIST.map((track, idx) => {
               const isSelected = idx === currentTrackIndex;
 
               return (
@@ -282,13 +287,15 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
                       {idx + 1}. {track.title}
                     </span>
                     <span className="text-[10px] text-[#8E82A6] truncate">
-                      {track.movie} • {track.mood}
+                      {track.artist} • {track.mood}
                     </span>
                   </div>
                   {isSelected && (
                     <div className="flex items-center gap-1 text-[#E8C374] shrink-0">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#E8C374] animate-ping" />
-                      <span className="text-[9px] font-bold uppercase">PLAYING</span>
+                      <span className="text-[9px] font-bold uppercase">
+                        {isPlaying ? 'PLAYING' : 'PAUSED'}
+                      </span>
                     </div>
                   )}
                 </button>
@@ -297,7 +304,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) =
           </div>
 
           <p className="text-[10px] text-center text-[#827699] mt-2 pt-2 border-t border-white/5 font-light">
-            💡 Tap any song to play instantly
+            ✨ Pure ad-free melody for your special night
           </p>
         </div>
       )}

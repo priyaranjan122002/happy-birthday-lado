@@ -11,8 +11,8 @@ export const siteContent: SiteContent = {
   heroSubtitle: "To the girl who made my world brighter, softer, and infinitely more magical. Today is all about celebrating you.",
   
   // ── Audio & Video Configuration ────────────────────────────────
-  // You can put your mp3 file in public/music/song.mp3 or use an online URL
-  bgMusicUrl: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112199.mp3",
+  // Ad-free direct audio bundled with the website
+  bgMusicUrl: "./music/romantic.mp3",
   
   // Video file: Drop your video into public/video/tribute.mp4 or use YouTube/Drive
   videoUrl: "./video/tribute.mp4",
